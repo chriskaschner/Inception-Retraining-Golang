@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package tensorflow_test
+package main
 
 import (
 	"bufio"
@@ -26,7 +26,7 @@ import (
 	tf "github.com/tensorflow/tensorflow/tensorflow/go"
 )
 
-func Example() {
+func main() {
 	// An example for using the TensorFlow Go API for image recognition
 	// using a pre-trained inception model (http://arxiv.org/abs/1512.00567).
 	//
@@ -57,10 +57,8 @@ func Example() {
 		   curl -L https://storage.googleapis.com/download.tensorflow.org/models/inception5h.zip -o /tmp/inception5h.zip
 		   unzip /tmp/inception5h.zip -d /tmp
 		*/
-		modelFile = "/Users/Chris/go_workspace/src/github.com/chriskaschner/Inception-Retraining-Golang/output_graph.pb"
-		// "/tmp/tensorflow_inception_graph.pb"
-		labelsFile = "/Users/Chris/go_workspace/src/github.com/chriskaschner/Inception-Retraining-Golang/output_labels.txt"
-		// "/tmp/imagenet_comp_graph_label_strings.txt"
+		modelFile  = "/tmp/tensorflow_inception_graph.pb"
+		labelsFile = "/tmp/imagenet_comp_graph_label_strings.txt"
 
 		// Image file to "recognize".
 		testImageFilename = "/Users/Chris/go_workspace/src/github.com/chriskaschner/Inception-Retraining-Golang/images/AltraExample.jpg"
