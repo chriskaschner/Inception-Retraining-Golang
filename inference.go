@@ -16,19 +16,17 @@ package inception
 
 import (
 	"bufio"
-	"encoding/json"
 	"fmt"
 	"image"
 	_ "image/jpeg"
 	"io/ioutil"
 	"log"
 	"os"
-	"strconv"
 
 	tf "github.com/tensorflow/tensorflow/tensorflow/go"
 )
 
-func Inference() string {
+func Inference(imageUrl string) (float32, string) {
 	// An example for using the TensorFlow Go API for image recognition
 	// using a pre-trained inception model (http://arxiv.org/abs/1512.00567).
 	//
@@ -112,7 +110,7 @@ func Inference() string {
 	return printBestLabel(probabilities, labelsFile)
 }
 
-func printBestLabel(probabilities []float32, labelsFile string) string {
+func printBestLabel(probabilities []float32, labelsFile string) (float32, string) {
 	bestIdx := 0
 	for i, p := range probabilities {
 		if p > probabilities[bestIdx] {
@@ -137,13 +135,13 @@ func printBestLabel(probabilities []float32, labelsFile string) string {
 	// fmt.Printf("BEST MATCH: (%2.2f%% likely) %s\n", probabilities[bestIdx]*100.0, labels[bestIdx])
 	// fmt.Printf("Result_Score_1: %2.2f%%,Result_Label_1:%s\n", probabilities[bestIdx]*100.0, labels[bestIdx])
 
-	tempA := (probabilities[bestIdx] * 100.0)
-	tempB := strconv.FormatFloat(float64(tempA), 'f', 3, 64)
-	tempC := labels[bestIdx]
-	mapD := map[string]string{"Result_Score_1": tempB, "Result_Label_1": tempC}
-	mapB, _ := json.Marshal(mapD)
-	// fmt.Println(string(mapB))
-	return string(mapB)
+	Result_Score_1 := (probabilities[bestIdx] * 100.0)
+	// tempB := strconv.FormatFloat(float64(tempA), 'f', 3, 64)
+	Result_Label_1 := labels[bestIdx]
+	// mapD := map[string]string{"Result_Score_1": tempB, "Result_Label_1": tempC}
+	// mapB, _ := json.Marshal(mapD)
+
+	return Result_Score_1, Result_Label_1
 }
 
 // Given an image stored in filename, returns a Tensor which is suitable for
