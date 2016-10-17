@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package main
+package inception
 
 import (
 	"bufio"
@@ -28,7 +28,7 @@ import (
 	tf "github.com/tensorflow/tensorflow/tensorflow/go"
 )
 
-func main() {
+func Inference() string {
 	// An example for using the TensorFlow Go API for image recognition
 	// using a pre-trained inception model (http://arxiv.org/abs/1512.00567).
 	//
@@ -109,10 +109,10 @@ func main() {
 	// labels for each image in the "batch". The batch size was 1.
 	// Find the most probably label index.
 	probabilities := output[0].Value().([][]float32)[0]
-	printBestLabel(probabilities, labelsFile)
+	return printBestLabel(probabilities, labelsFile)
 }
 
-func printBestLabel(probabilities []float32, labelsFile string) {
+func printBestLabel(probabilities []float32, labelsFile string) string {
 	bestIdx := 0
 	for i, p := range probabilities {
 		if p > probabilities[bestIdx] {
@@ -135,14 +135,15 @@ func printBestLabel(probabilities []float32, labelsFile string) {
 		log.Printf("ERROR: failed to read %s: %v", labelsFile, err)
 	}
 	// fmt.Printf("BEST MATCH: (%2.2f%% likely) %s\n", probabilities[bestIdx]*100.0, labels[bestIdx])
-	fmt.Printf("Result_Score_1: %2.2f%%,Result_Label_1:%s\n", probabilities[bestIdx]*100.0, labels[bestIdx])
+	// fmt.Printf("Result_Score_1: %2.2f%%,Result_Label_1:%s\n", probabilities[bestIdx]*100.0, labels[bestIdx])
 
 	tempA := (probabilities[bestIdx] * 100.0)
 	tempB := strconv.FormatFloat(float64(tempA), 'f', 3, 64)
 	tempC := labels[bestIdx]
 	mapD := map[string]string{"Result_Score_1": tempB, "Result_Label_1": tempC}
 	mapB, _ := json.Marshal(mapD)
-	fmt.Println(string(mapB))
+	// fmt.Println(string(mapB))
+	return string(mapB)
 }
 
 // Given an image stored in filename, returns a Tensor which is suitable for
