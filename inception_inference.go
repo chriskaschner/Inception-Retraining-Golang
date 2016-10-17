@@ -16,12 +16,14 @@ package main
 
 import (
 	"bufio"
+	"encoding/json"
 	"fmt"
 	"image"
 	_ "image/jpeg"
 	"io/ioutil"
 	"log"
 	"os"
+	"strconv"
 
 	tf "github.com/tensorflow/tensorflow/tensorflow/go"
 )
@@ -102,6 +104,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+
 	// output[0].Value() is a vector containing probabilities of
 	// labels for each image in the "batch". The batch size was 1.
 	// Find the most probably label index.
@@ -131,7 +134,15 @@ func printBestLabel(probabilities []float32, labelsFile string) {
 	if err := scanner.Err(); err != nil {
 		log.Printf("ERROR: failed to read %s: %v", labelsFile, err)
 	}
-	fmt.Printf("BEST MATCH: (%2.0f%% likely) %s\n", probabilities[bestIdx]*100.0, labels[bestIdx])
+	// fmt.Printf("BEST MATCH: (%2.2f%% likely) %s\n", probabilities[bestIdx]*100.0, labels[bestIdx])
+	fmt.Printf("Result_Score_1: %2.2f%%,Result_Label_1:%s\n", probabilities[bestIdx]*100.0, labels[bestIdx])
+
+	tempA := (probabilities[bestIdx] * 100.0)
+	tempB := strconv.FormatFloat(float64(tempA), 'f', 3, 64)
+	tempC := labels[bestIdx]
+	mapD := map[string]string{"Result_Score_1": tempB, "Result_Label_1": tempC}
+	mapB, _ := json.Marshal(mapD)
+	fmt.Println(string(mapB))
 }
 
 // Given an image stored in filename, returns a Tensor which is suitable for
